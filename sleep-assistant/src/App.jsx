@@ -91,14 +91,10 @@ function App() {
       setCurrentTime(now)
       
       // Auto-switch themes only if user hasn't manually overridden
-      const hour = now.getHours()
-      const isEvening = hour >= 18 || hour < 6
-      
-      // Removed the auto-switching logic that was forcing filter mode
-      // This fixes the "snap to filter mode" issue
+      // Removed filter logic
     }, 1000)
     return () => clearInterval(timer)
-  }, [isDarkMode, blueLightFilter, manualThemeOverride, manualFilterOverride])
+  }, []) // Removed dependencies to stop it from running on state changes
 
   const formatTime = (date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
