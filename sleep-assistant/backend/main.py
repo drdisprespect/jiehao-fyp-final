@@ -45,6 +45,11 @@ class TTSRequest(BaseModel):
     text: str
     speaker_name: Optional[str] = "Speaker 1"
 
+# Add this to handle OPTIONS requests gracefully for Render/Vercel
+@app.options("/{path:path}")
+async def options_handler(path: str):
+    return {"status": "ok"}
+    
 class TTSResponse(BaseModel):
     success: bool
     audio_id: Optional[str] = None
