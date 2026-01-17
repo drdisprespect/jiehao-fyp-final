@@ -39,7 +39,7 @@ const ChatBot = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
         const response = await fetch(`${baseURL}/api/assemblyai/token`)
         const data = await response.json()
         if (data.token) {
@@ -253,7 +253,7 @@ const ChatBot = () => {
       
       // If no token, fetch it in parallel
       if (!token) {
-        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
         promises.push(fetch(`${baseURL}/api/assemblyai/token`).then(r => r.json()))
       }
 

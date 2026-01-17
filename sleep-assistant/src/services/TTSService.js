@@ -1,6 +1,9 @@
 class TTSService {
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+    // Use environment variable for API URL, fallback to Render URL if env var is missing
+    this.baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
+    
+    console.log('TTSService initialized with baseURL:', this.baseURL)
     this.isInitialized = false
     this.currentAudio = null
     this.audioQueue = []

@@ -1,7 +1,9 @@
 class OpenAIService {
   constructor() {
-    // Use environment variable for API URL, fallback to localhost for local dev
-    this.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+    // Use environment variable for API URL, fallback to Render URL if env var is missing
+    this.baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
+    
+    console.log('OpenAIService initialized with baseURL:', this.baseURL)
     this.systemPrompt = `You are a gentle, empathetic sleep coach and wellness assistant. Your role is to help users relax, unwind, and prepare for restful sleep. You should:
 
 - Provide calming, soothing responses
