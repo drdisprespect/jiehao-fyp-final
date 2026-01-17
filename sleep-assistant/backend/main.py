@@ -31,6 +31,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
 allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",")]
 
+# Add Vercel preview deployments support (optional, but good for testing)
+# If you want to allow ALL Vercel previews, you might need a more dynamic approach,
+# but for now, let's make sure the production URL is allowed.
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
@@ -38,6 +42,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    """Root endpoint to verify the service is running."""
+    return {
+        "status": "online",
+        "service": "Sleep Assistant API",
+        "documentation": "/docs"
+    }
 
 # Request/Response models
 class TTSRequest(BaseModel):
