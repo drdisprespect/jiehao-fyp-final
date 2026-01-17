@@ -1,6 +1,6 @@
 class TTSService {
   constructor() {
-    this.baseURL = import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin
+    this.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
     this.isInitialized = false
     this.currentAudio = null
     this.audioQueue = []

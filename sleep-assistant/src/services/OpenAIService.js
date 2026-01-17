@@ -1,7 +1,7 @@
 class OpenAIService {
   constructor() {
     // Use backend API for OpenAI communication (API key is secure on backend)
-    this.baseURL = import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin
+    this.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
     this.systemPrompt = `You are a gentle, empathetic sleep coach and wellness assistant. Your role is to help users relax, unwind, and prepare for restful sleep. You should:
 
 - Provide calming, soothing responses
