@@ -35,6 +35,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Trust Forwarded headers from Render's load balancer
+# This is crucial for rate limiting (slowapi) to work correctly behind a proxy
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+
 # Request/Response models
 class TTSRequest(BaseModel):
     text: str
