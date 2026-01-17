@@ -39,7 +39,8 @@ const ChatBot = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/assemblyai/token')
+        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const response = await fetch(`${baseURL}/api/assemblyai/token`)
         const data = await response.json()
         if (data.token) {
           setAssemblyToken(data.token)
@@ -252,7 +253,8 @@ const ChatBot = () => {
       
       // If no token, fetch it in parallel
       if (!token) {
-        promises.push(fetch('http://localhost:8000/api/assemblyai/token').then(r => r.json()))
+        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        promises.push(fetch(`${baseURL}/api/assemblyai/token`).then(r => r.json()))
       }
 
       const results = await Promise.all(promises)
