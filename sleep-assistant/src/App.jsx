@@ -94,23 +94,8 @@ function App() {
       const hour = now.getHours()
       const isEvening = hour >= 18 || hour < 6
       
-      // Auto-enable dark mode in the evening (only if not manually overridden)
-      if (isEvening && !isDarkMode && !manualThemeOverride) {
-        setIsDarkMode(true)
-      }
-      // Auto-enable light mode during day (only if not manually overridden)
-      else if (!isEvening && isDarkMode && !manualThemeOverride) {
-        setIsDarkMode(false)
-      }
-      
-      // Auto-enable blue light filter in the evening (only if not manually overridden)
-      if (isEvening && !blueLightFilter && !manualFilterOverride) {
-        setBlueLightFilter(true)
-      }
-      // Auto-disable blue light filter during day (only if not manually overridden)
-      else if (!isEvening && blueLightFilter && !manualFilterOverride) {
-        setBlueLightFilter(false)
-      }
+      // Removed the auto-switching logic that was forcing filter mode
+      // This fixes the "snap to filter mode" issue
     }, 1000)
     return () => clearInterval(timer)
   }, [isDarkMode, blueLightFilter, manualThemeOverride, manualFilterOverride])
