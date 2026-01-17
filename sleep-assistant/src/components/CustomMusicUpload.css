@@ -1,0 +1,400 @@
+/* Custom Music Upload Styles */
+.custom-music-upload {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Upload Dropzone */
+.upload-dropzone {
+  border: 2px dashed var(--border-subtle);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--surface-elevated);
+}
+
+.upload-dropzone:hover {
+  border-color: var(--accent-blue);
+  background: var(--tertiary-dark);
+  transform: translateY(-1px);
+}
+
+.upload-dropzone.drag-active {
+  border-color: var(--accent-blue);
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.upload-icon {
+  color: var(--accent-blue);
+  margin-bottom: 8px;
+}
+
+.upload-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white-soft);
+  margin: 0;
+}
+
+.upload-description {
+  color: var(--muted-text);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.upload-formats {
+  color: var(--muted-text);
+  font-size: 0.875rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.upload-btn {
+  margin-top: 8px;
+}
+
+/* Uploaded Tracks */
+.uploaded-tracks {
+  width: 100%;
+}
+
+.tracks-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white-soft);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tracks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-item {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.track-item:hover {
+  background: var(--tertiary-dark);
+  border-color: var(--accent-blue);
+}
+
+.track-item.active {
+  border-color: var(--accent-blue);
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.track-artwork {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--gradient-aurora);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.track-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  font-weight: 500;
+  color: var(--white-soft);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: var(--muted-text);
+}
+
+.track-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.track-play-btn,
+.track-remove-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-remove-btn:hover {
+  background: rgba(255, 99, 99, 0.2);
+  border-color: rgba(255, 99, 99, 0.3);
+  color: #ff6363;
+}
+
+/* Light theme overrides for Custom Music Upload */
+.light-theme .upload-dropzone {
+  background: var(--light-surface-elevated);
+  border: 2px dashed var(--light-border-subtle);
+}
+
+.light-theme .upload-dropzone:hover {
+  border-color: var(--light-accent-blue);
+  background: var(--light-tertiary);
+}
+
+.light-theme .upload-dropzone.drag-active {
+  border-color: var(--light-accent-blue);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+
+.light-theme .upload-icon {
+  color: var(--light-accent-blue);
+}
+
+.light-theme .upload-title {
+  color: var(--light-dark-text);
+}
+
+.light-theme .upload-description {
+  color: var(--light-muted-text);
+}
+
+.light-theme .upload-formats {
+  color: var(--light-muted-text);
+}
+
+.light-theme .tracks-title {
+  color: var(--light-dark-text);
+}
+
+.light-theme .track-item {
+  background: var(--light-surface-elevated);
+  border: 1px solid var(--light-border-subtle);
+}
+
+.light-theme .track-item:hover {
+  background: var(--light-tertiary);
+  border-color: var(--light-accent-blue);
+}
+
+.light-theme .track-item.active {
+  border-color: var(--light-accent-blue);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.light-theme .track-name {
+  color: var(--light-dark-text);
+}
+
+.light-theme .track-meta {
+  color: var(--light-muted-text);
+}
+
+.light-theme .track-remove-btn:hover {
+  background: rgba(255, 99, 99, 0.2);
+  border-color: rgba(255, 99, 99, 0.3);
+  color: #ff6363;
+}
+
+.light-theme .upload-tips {
+  background: var(--light-surface-elevated);
+  border: 1px solid var(--light-border-subtle);
+}
+
+.light-theme .tips-title {
+  color: var(--light-dark-text);
+}
+
+.light-theme .tips-list li {
+  color: var(--light-muted-text);
+}
+
+.light-theme .tips-list li::before {
+  color: var(--light-accent-blue);
+}
+
+/* Tips Section */
+.upload-tips {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.tips-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white-soft);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tips-list li {
+  color: var(--muted-text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+
+.tips-list li::before {
+  content: '•';
+  color: var(--accent-blue);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .upload-dropzone {
+    padding: 32px 16px;
+  }
+  
+  .upload-title {
+    font-size: 1.25rem;
+  }
+  
+  .upload-description {
+    font-size: 0.9rem;
+  }
+  
+  .track-item {
+    padding: 12px;
+  }
+  
+  .track-artwork {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .track-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .track-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-dropzone {
+    padding: 24px 12px;
+  }
+  
+  .upload-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .upload-title {
+    font-size: 1.125rem;
+  }
+  
+  .track-info {
+    gap: 8px;
+  }
+  
+  .track-artwork {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .track-name {
+    font-size: 0.9rem;
+  }
+  
+  .track-meta {
+    font-size: 0.8rem;
+  }
+  
+  .track-actions .btn {
+    min-width: 32px;
+    height: 32px;
+  }
+}
+
+/* Animation for new tracks */
+@keyframes trackSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.track-item {
+  animation: trackSlideIn 0.3s ease-out;
+}
+
+/* Drag and drop visual feedback */
+.upload-dropzone.drag-active .upload-icon {
+  animation: bounce 0.6s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
