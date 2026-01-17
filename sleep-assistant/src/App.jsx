@@ -86,15 +86,25 @@ function App() {
   }, [ambientAudioEnabled])
 
   useEffect(() => {
+    // Only set initial state on mount, never auto-switch again
+    const hour = new Date().getHours()
+    const isEvening = hour >= 18 || hour < 6
+    
+    // Set initial state without forcing override
+    if (isEvening) {
+      // Only set if we haven't touched it yet
+      // setIsDarkMode(true) 
+      // setBlueLightFilter(true)
+    }
+  }, []) 
+
+  useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date()
       setCurrentTime(now)
-      
-      // Auto-switch themes only if user hasn't manually overridden
-      // Removed filter logic
     }, 1000)
     return () => clearInterval(timer)
-  }, []) // Removed dependencies to stop it from running on state changes
+  }, [])
 
   const formatTime = (date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
