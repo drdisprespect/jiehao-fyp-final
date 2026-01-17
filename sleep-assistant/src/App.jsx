@@ -38,6 +38,22 @@ function App() {
   const [_duration, setDuration] = useState(0)
   const [_audioCurrentTime, setAudioCurrentTime] = useState(0)
 
+  // Keep-alive mechanism for Render backend
+  useEffect(() => {
+    // Ping the health endpoint every 45 seconds (Render sleeps after 50s of inactivity)
+    const pingInterval = setInterval(async () => {
+      try {
+        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        await fetch(`${baseURL}/health`)
+        // console.log('Backend ping successful')
+      } catch (error) {
+        // console.error('Backend ping failed', error)
+      }
+    }, 45000)
+
+    return () => clearInterval(pingInterval)
+  }, [])
+
   // Audio management effects
   useEffect(() => {
     const audio = audioRef.current
