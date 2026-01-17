@@ -50,6 +50,10 @@ class TTSRequest(BaseModel):
 async def options_handler(path: str):
     return {"status": "ok"}
     
+@app.head("/{path:path}")
+async def head_handler(path: str):
+    return {"status": "ok"}
+    
 class TTSResponse(BaseModel):
     success: bool
     audio_id: Optional[str] = None
