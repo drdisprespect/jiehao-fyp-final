@@ -90,7 +90,34 @@
   align-items: center;
 }
 
+.header-visibility-toggle {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .header-toggle-label {
+  font-size: 0.875rem;
+}
+
+.header.hidden {
+  display: none;
+}
+
+.header-show-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+}
+
+.header-show-label {
   font-size: 0.875rem;
 }
 
@@ -452,6 +479,10 @@
     display: inline-flex;
   }
 
+  .header-visibility-toggle {
+    display: inline-flex;
+  }
+
   .header-toggle-label {
     display: none;
   }
@@ -544,6 +575,10 @@
 
   .tab-button {
     min-width: 64px;
+  }
+
+  .header-show-label {
+    display: none;
   }
 }
 

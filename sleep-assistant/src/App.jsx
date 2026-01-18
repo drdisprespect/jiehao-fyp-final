@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Moon, Music, MessageCircle, Volume2, VolumeX, Upload, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { Moon, Music, MessageCircle, Volume2, VolumeX, Upload, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react'
 import MusicPlayer from './components/MusicPlayer'
 import ChatBot from './components/ChatBot'
 import CustomMusicUpload from './components/CustomMusicUpload'
@@ -25,6 +25,7 @@ function App() {
   const [ambientAudioEnabled, setAmbientAudioEnabled] = useState(true)
   const [ambientAudioVolume, _setAmbientAudioVolume] = useState(0.3)
   const [headerExpanded, setHeaderExpanded] = useState(false)
+  const [headerHidden, setHeaderHidden] = useState(false)
 
   useEffect(() => {
     const root = document.documentElement
@@ -158,7 +159,7 @@ function App() {
       />
       
       {/* Header */}
-      <header className="header">
+      <header className={`header ${headerHidden ? 'hidden' : ''}`}>
         <div className="container header-main">
           <div className="flex items-center gap-4">
             <div className="logo floating">
@@ -221,6 +222,19 @@ function App() {
             </div>
             <button
               type="button"
+              className="header-visibility-toggle btn btn-secondary"
+              onClick={() => {
+                setHeaderHidden(true)
+                setHeaderExpanded(false)
+              }}
+              aria-label="Hide header"
+              title="Hide header"
+            >
+              <EyeOff size={18} />
+              <span className="header-toggle-label">Hide</span>
+            </button>
+            <button
+              type="button"
               className="header-toggle btn btn-secondary"
               onClick={() => setHeaderExpanded(v => !v)}
               aria-expanded={headerExpanded}
@@ -232,6 +246,18 @@ function App() {
           </div>
         </div>
       </header>
+      {headerHidden && (
+        <button
+          type="button"
+          className="header-show-btn btn btn-secondary"
+          onClick={() => setHeaderHidden(false)}
+          aria-label="Show header"
+          title="Show header"
+        >
+          <Eye size={18} />
+          <span className="header-show-label">Show header</span>
+        </button>
+      )}
 
       {/* Main Content */}
       <main className="main-content">
