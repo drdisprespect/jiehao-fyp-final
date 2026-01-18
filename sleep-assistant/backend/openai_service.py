@@ -87,7 +87,7 @@ Remember: Create diverse, unique stories each time. Never repeat the same settin
             response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                max_completion_tokens=800
+                max_completion_tokens=650
             )
             
             # Extract the response text
