@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Send, Mic, MicOff, Volume2, Bot, User, Loader, Sparkles, MessageCircle, Clock } from 'lucide-react'
 import { OpenAIService } from '../services/OpenAIService'
 import { ttsService } from '../services/TTSService'
+import { getApiBaseUrl } from '../services/apiBaseUrl'
 import './ChatBot.css'
 
 const ChatBot = () => {
@@ -39,7 +40,7 @@ const ChatBot = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const baseURL = getApiBaseUrl()
         const response = await fetch(`${baseURL}/api/assemblyai/token`)
         const data = await response.json()
         if (data.token) {
@@ -253,7 +254,7 @@ const ChatBot = () => {
       
       // If no token, fetch it in parallel
       if (!token) {
-        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const baseURL = getApiBaseUrl()
         promises.push(fetch(`${baseURL}/api/assemblyai/token`).then(r => r.json()))
       }
 

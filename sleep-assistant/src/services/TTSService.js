@@ -1,7 +1,8 @@
+import { getApiBaseUrl } from './apiBaseUrl'
+
 class TTSService {
   constructor() {
-    // Use environment variable for API URL
-    this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    this.baseURL = getApiBaseUrl()
     
     console.log('TTSService initialized with baseURL:', this.baseURL)
     this.isInitialized = false

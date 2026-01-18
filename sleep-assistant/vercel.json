@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "https://jiehao-fyp-final.onrender.com/health"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://jiehao-fyp-final.onrender.com/api/:path*"
+    }
+  ]
+}
+

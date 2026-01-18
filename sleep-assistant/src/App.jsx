@@ -8,6 +8,7 @@ import AtmosphericEffects from './components/AtmosphericEffects'
 import AISleepRoutine from './components/AISleepRoutine'
 import GlobalEffectsRenderer from './components/GlobalEffectsRenderer'
 import AtmosphericAudio from './components/AtmosphericAudio'
+import { getApiBaseUrl } from './services/apiBaseUrl'
 import './App.css'
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
     // Ping the health endpoint every 45 seconds (Render sleeps after 50s of inactivity)
     const pingInterval = setInterval(async () => {
       try {
-        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+        const baseURL = getApiBaseUrl()
         await fetch(`${baseURL}/health`)
         // console.log('Backend ping successful')
       } catch (error) {

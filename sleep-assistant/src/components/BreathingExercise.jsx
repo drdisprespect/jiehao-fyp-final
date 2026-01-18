@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { Play, Pause, RotateCcw, Wind, Heart, Zap, Settings, Volume2, VolumeX, Waves, Moon, Sun } from 'lucide-react'
+import { getApiBaseUrl } from '../services/apiBaseUrl'
 import './BreathingExercise.css'
 
 const BreathingExercise = () => {
@@ -24,7 +25,7 @@ const BreathingExercise = () => {
 
   const loadRecentSessions = async () => {
     try {
-      const baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
+      const baseURL = getApiBaseUrl()
       const response = await fetch(`${baseURL}/api/breathing-sessions`)
       const data = await response.json()
       if (data.success) {
@@ -37,7 +38,7 @@ const BreathingExercise = () => {
 
   const logSession = async (technique, cycles, duration) => {
     try {
-      const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
+      const baseURL = getApiBaseUrl()
       const response = await fetch(`${baseURL}/api/breathing-session`, {
         method: 'POST',
         headers: {
