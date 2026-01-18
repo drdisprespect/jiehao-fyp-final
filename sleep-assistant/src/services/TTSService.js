@@ -11,6 +11,45 @@ class TTSService {
     this.isPlaying = false
   }
 
+  async sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  getRetryAfterMs(response, attempt) {
+    const retryAfter = response.headers?.get?.('Retry-After')
+    const seconds = retryAfter ? Number(retryAfter) : NaN
+    if (Number.isFinite(seconds) && seconds > 0) return seconds * 1000
+    const base = Math.min(8000, 1000 * Math.pow(2, attempt))
+    const jitter = Math.floor(Math.random() * 250)
+    return base + jitter
+  }
+
+  async fetchTTS(text, speakerName, attempt = 0) {
+    const response = await fetch(`${this.baseURL}/api/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, speaker_name: speakerName })
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return { response, data }
+    }
+
+    const errorText = await response.text()
+    const retryable = response.status === 429 || response.status === 503 || response.status === 502 || response.status === 504
+    const maxAttempts = 5
+
+    if (retryable && attempt < maxAttempts) {
+      const waitMs = this.getRetryAfterMs(response, attempt)
+      await this.sleep(waitMs)
+      return this.fetchTTS(text, speakerName, attempt + 1)
+    }
+
+    console.error('TTS API error response:', response.status, errorText)
+    throw new Error(`TTS API Error (${response.status}): ${errorText}`)
+  }
+
   /**
    * Check if the TTS service is ready
    */
@@ -48,24 +87,7 @@ class TTSService {
         }
       }
 
-      const response = await fetch(`${this.baseURL}/api/tts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: text,
-          speaker_name: speakerName
-        })
-      })
-
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error('TTS API error response:', response.status, errorText)
-        throw new Error(`TTS API Error (${response.status}): ${errorText}`)
-      }
-
-      const data = await response.json()
+      const { data } = await this.fetchTTS(text, speakerName)
 
       if (!data.success) {
         console.error('TTS API returned error:', data)
@@ -255,37 +277,46 @@ class TTSService {
       const chunks = this.splitTextIntoChunks(text, 800) // Smaller chunks for faster TTS
       
       let hasStartedPlaying = false
-      const audioQueue = []
+      const audioQueue = Array.from({ length: chunks.length })
       
-      // Process chunks in parallel but play sequentially
-      const chunkPromises = chunks.map(async (chunk, index) => {
-        try {
-          const result = await this.textToSpeech(chunk, speakerName)
-          
-          // Add to queue with order information
-          audioQueue[index] = {
-            audioUrl: result.audioUrl,
-            audioId: result.audioId,
-            index: index,
-            ready: true
+      const concurrency = 2
+      let nextIndex = 0
+
+      const worker = async () => {
+        while (nextIndex < chunks.length) {
+          const index = nextIndex
+          nextIndex += 1
+          const chunk = chunks[index]
+          try {
+            const result = await this.textToSpeech(chunk, speakerName)
+            audioQueue[index] = {
+              audioUrl: result.audioUrl,
+              audioId: result.audioId,
+              index,
+              ready: true
+            }
+
+            if (!hasStartedPlaying && index === 0) {
+              hasStartedPlaying = true
+              this.playStreamingQueue(audioQueue, chunks.length, onEnd, onError)
+            }
+          } catch (error) {
+            console.error(`Chunk ${index + 1} failed:`, error)
+            audioQueue[index] = { error, index, ready: false }
+            if (index === 0) {
+              throw error
+            }
           }
-          
-          // Start playing as soon as first chunk is ready
-          if (!hasStartedPlaying && index === 0) {
-            hasStartedPlaying = true
-            this.playStreamingQueue(audioQueue, chunks.length, onEnd, onError)
-          }
-          
-          return result
-        } catch (error) {
-          console.error(`Chunk ${index + 1} failed:`, error)
-          audioQueue[index] = { error: error, index: index, ready: false }
-          throw error
         }
-      })
-      
-      // Wait for all chunks to complete
-      await Promise.allSettled(chunkPromises)
+      }
+
+      const workers = Array.from({ length: concurrency }, () => worker())
+      await Promise.all(workers)
+
+      if (!hasStartedPlaying && audioQueue[0] && audioQueue[0].ready) {
+        hasStartedPlaying = true
+        this.playStreamingQueue(audioQueue, chunks.length, onEnd, onError)
+      }
       
       return { 
         streaming: true, 

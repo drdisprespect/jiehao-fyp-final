@@ -172,7 +172,7 @@ async def health_check():
     )
 
 @app.post("/api/tts", response_model=TTSResponse)
-@limiter.limit("5/minute")
+@limiter.limit("60/minute")
 async def text_to_speech(request: Request, body: TTSRequest):
     """
     Convert text to speech using Unreal Speech.
