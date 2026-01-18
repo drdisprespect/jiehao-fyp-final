@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Moon, Music, MessageCircle, Volume2, VolumeX, Upload, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle } from 'lucide-react'
+import { Moon, Music, MessageCircle, Volume2, VolumeX, Upload, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import MusicPlayer from './components/MusicPlayer'
 import ChatBot from './components/ChatBot'
 import CustomMusicUpload from './components/CustomMusicUpload'
@@ -24,6 +24,7 @@ function App() {
   const [ambientLightingEnabled, setAmbientLightingEnabled] = useState(true)
   const [ambientAudioEnabled, setAmbientAudioEnabled] = useState(true)
   const [ambientAudioVolume, _setAmbientAudioVolume] = useState(0.3)
+  const [headerExpanded, setHeaderExpanded] = useState(false)
 
   useEffect(() => {
     const root = document.documentElement
@@ -34,6 +35,7 @@ function App() {
   
   // Audio-related state and ref for persistence
   const audioRef = useRef(null)
+  const headerActionsRef = useRef(null)
   const [volume, setVolume] = useState(0.5)
   const [isMuted, setIsMuted] = useState(false)
   const [_duration, setDuration] = useState(0)
@@ -107,6 +109,24 @@ function App() {
     return () => clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    if (!headerExpanded) return
+
+    const handler = (event) => {
+      const el = headerActionsRef.current
+      if (!el) return
+      if (el.contains(event.target)) return
+      setHeaderExpanded(false)
+    }
+
+    document.addEventListener('mousedown', handler)
+    document.addEventListener('touchstart', handler)
+    return () => {
+      document.removeEventListener('mousedown', handler)
+      document.removeEventListener('touchstart', handler)
+    }
+  }, [headerExpanded])
+
   const formatTime = (date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
@@ -139,7 +159,7 @@ function App() {
       
       {/* Header */}
       <header className="header">
-        <div className="container flex justify-between items-center">
+        <div className="container header-main">
           <div className="flex items-center gap-4">
             <div className="logo floating">
               <Moon size={32} className="text-gradient" />
@@ -149,55 +169,66 @@ function App() {
               <p className="text-small">Your companion for better sleep</p>
             </div>
           </div>
-          <div className="header-controls">
-            <button
-              onClick={() => {
-                setIsDarkMode(!isDarkMode)
-                setManualThemeOverride(true)
-              }}
-              className={`btn ${isDarkMode ? 'btn-secondary' : 'btn-primary'} filter-btn`}
-              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-            </button>
-            <button
-              onClick={() => {
-                setBlueLightFilter(!blueLightFilter)
-                setManualFilterOverride(true)
-              }}
-              className={`btn ${blueLightFilter ? 'btn-primary' : 'btn-secondary'} filter-btn`}
-              title={blueLightFilter ? 'Disable blue light filter' : 'Enable blue light filter'}
-            >
-              {blueLightFilter ? <Moon size={16} /> : <Sun size={16} />}
-              {blueLightFilter ? 'Filter On' : 'Filter Off'}
-            </button>
-            <button
-              onClick={() => setAmbientLightingEnabled(!ambientLightingEnabled)}
-              className={`btn ${ambientLightingEnabled ? 'btn-primary' : 'btn-secondary'} filter-btn`}
-              title={ambientLightingEnabled ? 'Disable ambient lighting' : 'Enable ambient lighting'}
-            >
-              <Zap size={16} />
-              {ambientLightingEnabled ? 'Lighting On' : 'Lighting Off'}
-            </button>
-            <button
-              onClick={() => {
-                setAmbientAudioEnabled(!ambientAudioEnabled)
-                // If disabling audio, also pause current track
-                if (ambientAudioEnabled && isPlaying) {
-                  setIsPlaying(false)
-                }
-              }}
-              className={`btn ${ambientAudioEnabled ? 'btn-primary' : 'btn-secondary'} filter-btn`}
-              title={ambientAudioEnabled ? 'Mute all ambient sounds' : 'Enable ambient sounds'}
-            >
-              {ambientAudioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              {ambientAudioEnabled ? 'Sounds On' : 'Sounds Off'}
-            </button>
-            <div className="time-display">
-              <div className="text-medium">{formatTime(currentTime)}</div>
-              <div className="text-small">Time to relax</div>
+          <div className="app-header-actions" ref={headerActionsRef}>
+            <div className={`header-controls ${headerExpanded ? 'expanded' : ''}`}>
+              <button
+                onClick={() => {
+                  setIsDarkMode(!isDarkMode)
+                  setManualThemeOverride(true)
+                }}
+                className={`btn ${isDarkMode ? 'btn-secondary' : 'btn-primary'} filter-btn`}
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+                {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+              </button>
+              <button
+                onClick={() => {
+                  setBlueLightFilter(!blueLightFilter)
+                  setManualFilterOverride(true)
+                }}
+                className={`btn ${blueLightFilter ? 'btn-primary' : 'btn-secondary'} filter-btn`}
+                title={blueLightFilter ? 'Disable blue light filter' : 'Enable blue light filter'}
+              >
+                {blueLightFilter ? <Moon size={16} /> : <Sun size={16} />}
+                {blueLightFilter ? 'Filter On' : 'Filter Off'}
+              </button>
+              <button
+                onClick={() => setAmbientLightingEnabled(!ambientLightingEnabled)}
+                className={`btn ${ambientLightingEnabled ? 'btn-primary' : 'btn-secondary'} filter-btn`}
+                title={ambientLightingEnabled ? 'Disable ambient lighting' : 'Enable ambient lighting'}
+              >
+                <Zap size={16} />
+                {ambientLightingEnabled ? 'Lighting On' : 'Lighting Off'}
+              </button>
+              <button
+                onClick={() => {
+                  setAmbientAudioEnabled(!ambientAudioEnabled)
+                  if (ambientAudioEnabled && isPlaying) {
+                    setIsPlaying(false)
+                  }
+                }}
+                className={`btn ${ambientAudioEnabled ? 'btn-primary' : 'btn-secondary'} filter-btn`}
+                title={ambientAudioEnabled ? 'Mute all ambient sounds' : 'Enable ambient sounds'}
+              >
+                {ambientAudioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                {ambientAudioEnabled ? 'Sounds On' : 'Sounds Off'}
+              </button>
+              <div className="time-display">
+                <div className="text-medium">{formatTime(currentTime)}</div>
+                <div className="text-small">Time to relax</div>
+              </div>
             </div>
+            <button
+              type="button"
+              className="header-toggle btn btn-secondary"
+              onClick={() => setHeaderExpanded(v => !v)}
+              aria-expanded={headerExpanded}
+              aria-label={headerExpanded ? 'Hide header controls' : 'Show header controls'}
+            >
+              {headerExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              <span className="header-toggle-label">Controls</span>
+            </button>
           </div>
         </div>
       </header>
@@ -212,42 +243,42 @@ function App() {
               onClick={() => setActiveTab('breathing')}
             >
               <Wind size={20} />
-              Breathing
+              <span className="tab-label">Breathing</span>
             </button>
             <button
               className={`tab-button ${activeTab === 'music' ? 'active' : ''}`}
               onClick={() => setActiveTab('music')}
             >
               <Music size={20} />
-              Sounds
+              <span className="tab-label">Sounds</span>
             </button>
             <button
               className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
               onClick={() => setActiveTab('chat')}
             >
               <MessageCircle size={20} />
-              Coach
+              <span className="tab-label">Coach</span>
             </button>
             <button
               className={`tab-button ${activeTab === 'ai-routine' ? 'active' : ''}`}
               onClick={() => setActiveTab('ai-routine')}
             >
               <Brain size={20} />
-              AI Routine
+              <span className="tab-label">AI Routine</span>
             </button>
             <button
               className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
               onClick={() => setActiveTab('upload')}
             >
               <Upload size={20} />
-              My Music
+              <span className="tab-label">My Music</span>
             </button>
             <button
               className={`tab-button ${activeTab === 'effects' ? 'active' : ''}`}
               onClick={() => setActiveTab('effects')}
             >
               <Zap size={20} />
-              Effects
+              <span className="tab-label">Effects</span>
             </button>
           </nav>
 
