@@ -37,7 +37,7 @@ const BreathingExercise = () => {
 
   const logSession = async (technique, cycles, duration) => {
     try {
-      const baseURL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://jiehao-fyp-final.onrender.com'
+      const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
       const response = await fetch(`${baseURL}/api/breathing-session`, {
         method: 'POST',
         headers: {
