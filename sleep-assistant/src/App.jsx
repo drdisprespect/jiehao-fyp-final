@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Moon, Music, MessageCircle, Volume2, VolumeX, Upload, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react'
+import { Moon, Music, MessageCircle, Volume2, VolumeX, Play, Pause, Wind, Sun, Zap, Brain, Timer, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react'
 import MusicPlayer from './components/MusicPlayer'
 import ChatBot from './components/ChatBot'
-import CustomMusicUpload from './components/CustomMusicUpload'
 import BreathingExercise from './components/BreathingExercise'
 import AtmosphericEffects from './components/AtmosphericEffects'
 import AISleepRoutine from './components/AISleepRoutine'
@@ -12,7 +11,7 @@ import { getApiBaseUrl } from './services/apiBaseUrl'
 import './App.css'
 
 function App() {
-  const [activeTab, setActiveTab] = useState('breathing')
+  const [activeTab, setActiveTab] = useState('chat')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [currentTrack, setCurrentTrack] = useState(null)
@@ -130,12 +129,6 @@ function App() {
 
   const formatTime = (date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  }
-
-  const handleCustomTrackSelect = (track) => {
-    setCurrentTrack(track)
-    setIsPlaying(true)
-    setActiveTab('music') // Switch to music tab to show the player
   }
 
   return (
@@ -293,13 +286,6 @@ function App() {
               <span className="tab-label">AI Routine</span>
             </button>
             <button
-              className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
-              onClick={() => setActiveTab('upload')}
-            >
-              <Upload size={20} />
-              <span className="tab-label">My Music</span>
-            </button>
-            <button
               className={`tab-button ${activeTab === 'effects' ? 'active' : ''}`}
               onClick={() => setActiveTab('effects')}
             >
@@ -345,16 +331,6 @@ function App() {
               </div>
             )}
 
-            {activeTab === 'upload' && (
-              <div className="upload-section">
-                <CustomMusicUpload 
-                  onTrackSelect={handleCustomTrackSelect}
-                  isPlaying={isPlaying}
-                  currentTrack={currentTrack}
-                />
-              </div>
-            )}
-
             {activeTab === 'effects' && (
               <div className="effects-section">
                 <AtmosphericEffects 
@@ -379,7 +355,6 @@ function App() {
               {activeTab === 'music' && (isPlaying ? 'Playing ambient sounds' : 'Choose calming sounds for relaxation')}
               {activeTab === 'chat' && 'Chat with your AI sleep coach for personalized guidance'}
               {activeTab === 'ai-routine' && 'Create personalized sleep routines with AI-generated audio guidance'}
-              {activeTab === 'upload' && 'Add your own relaxing music for a personalized experience'}
               {activeTab === 'effects' && 'Enhance your environment with atmospheric effects'}
             </p>
           </div>
